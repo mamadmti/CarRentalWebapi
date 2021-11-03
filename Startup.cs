@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarRentalProject.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalProject
 {
@@ -25,6 +27,9 @@ namespace CarRentalProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<CRContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
