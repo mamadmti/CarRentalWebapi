@@ -26,7 +26,7 @@ namespace CarRentalProject.Controllers.Api
         // POST: api/Brands
         // اجاره ماشین
         [HttpPost]
-        public async Task<ActionResult> PostBrands(DtoRents.Post post)
+        public async Task<ActionResult> RentCar (DtoRents.Post post)
         {
             tblRents newRent = new tblRents();
             if( post.CarsId == 0 || post.UsersId == 0){ return BadRequest(); }
@@ -43,11 +43,6 @@ namespace CarRentalProject.Controllers.Api
             _context.TblCars.Update(car);
 
             await _context.SaveChangesAsync();
-            //جدول کرایه ها را نمایش میدهد
-            var show = new DtoRents.Show();
-            show.CarsId = newRent.TblCarsId;
-            show.Id = newRent.Id;
-            show.UsersId = newRent.TblUsersId;
 
             _context.TblUsers.ToList(); //برای اینکه کاربر رو نمایش بده
             return Ok( " اجاره شد " +newRent.TblUsers.UserName  + "  از طرف کاربر " + newRent.TblCars.Model + " ماشین ");
@@ -57,27 +52,32 @@ namespace CarRentalProject.Controllers.Api
 
 
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> PutBrands(int id, DtoRents.Put Put)
+        [HttpPut]
+        public async Task<ActionResult> ReturnCar ( DtoRents.Put Put)
         {
-            tblRents UpdateRent = new tblRents();
-            if (Put.CarsId == 0 || Put.UsersId == 0||Put.Id ==0) { return BadRequest(); }
-            UpdateRent.TblCarsId = Put.CarsId;
-            UpdateRent.TblUsersId = Put.UsersId;
-            UpdateRent.Id = Put.Id;
-            _context.TblRents.Update(UpdateRent);
+            //tblRents UpdateRent = new tblRents();
+            if (Put.CarsId == 0 || Put.UsersId == 0) { return BadRequest(); }
+
+            var lastRent = _context.TblRents.OrderBy(a=>a.Id).LastOrDefault(a => a.TblCarsId == Put.CarsId);
+            //lastRent.TblCarsId = Put.CarsId;
+            //lastRent.TblUsersId = Put.UsersId;
+            //lastRent.Id = id;
+            //_context.TblRents.Update(UpdateRent);
 
             //حالا بایستی قابل دسترس بودن آن را فعال کنیم
-            var car = _context.TblCars.FirstOrDefault(a => a.Id == Put.CarsId);
+
+            var data = _context.TblCars;
+            var car = data.FirstOrDefault(a => a.Id == Put.CarsId);
+            if(data==null || car==null){ return BadRequest("این ماشین در دسترس نیست"); }
             if (car.AvailabilityForRent == true) { return BadRequest("این ماشین اجاره نشده و در دسترس است"); }  
 
             car.AvailabilityForRent = true;
             _context.TblCars.Update(car);
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             _context.TblUsers.ToList(); //برای اینکه کاربر رو نمایش بده
-            return Ok(" برگردانده شد " + UpdateRent.TblUsers.UserName + "  از طرف کاربر " + UpdateRent.TblCars.Model + " ماشین ");
+            return Ok(" برگردانده شد " + lastRent.TblUsers.UserName + "  از طرف کاربر " + lastRent.TblCars.Model + " ماشین ");
         }
 
 

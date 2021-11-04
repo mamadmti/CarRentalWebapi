@@ -32,32 +32,39 @@ namespace CarRentalProject.Controllers.Api
             NewCar.tblBrandsId = post.BrandsId;
             NewCar.tblGearboxTypeId = post.GearboxTypeId;
             NewCar.tblColorsId = post.ColorsId;
+            NewCar.AvailabilityForRent = true;
 
             _context.TblCars.Add(NewCar);
+
             await _context.SaveChangesAsync();
             return Ok(NewCar);
         }
 
+       
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> GetBrand(int id,DtoCars.Put put)
+        public async Task<ActionResult> UpdateCar(int id,DtoCars.Put put)
         {
-            var data = _context.TblCars.Where(i => i.Id == id).ToList();
-            if (data.Count == 0) { return NotFound(); }
+            
+            
+            var carinfos = _context.TblCars.Where(i => i.Id == id).FirstOrDefault();
 
-            tblCars NewCar = new tblCars();
-            NewCar.Id = put.Id;
-            NewCar.Model = put.Model;
-            NewCar.PlateNum = put.PlateNum;
-            NewCar.ManufactorDate = put.ManufactorDate;
-            NewCar.EngineModel = put.EngineModel;
-            NewCar.tblBrandsId = put.BrandsId;
-            NewCar.tblGearboxTypeId = put.GearboxTypeId;
-            NewCar.tblColorsId = put.ColorsId;
 
-            _context.TblCars.Update(NewCar);
+
+            carinfos.Id = id;
+            carinfos.Model = put.Model;
+            carinfos.PlateNum = put.PlateNum;
+            carinfos.ManufactorDate = put.ManufactorDate;
+            carinfos.EngineModel = put.EngineModel;
+            carinfos.tblBrandsId = put.BrandsId;
+            carinfos.tblGearboxTypeId = put.GearboxTypeId;
+            carinfos.tblColorsId = put.ColorsId;
+            carinfos.AvailabilityForRent = carinfos.AvailabilityForRent;
+            _context.TblCars.Update(carinfos);
             await _context.SaveChangesAsync();
-            return Ok(NewCar);
+            return Ok(carinfos);
+
+
         }
 
 
