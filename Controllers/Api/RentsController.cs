@@ -11,14 +11,9 @@ namespace CarRentalProject.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class RentsController : ControllerBase
     {
         private readonly CRContext _context;
 
-        public UsersController(CRContext context)
-        {
-            _context = context;
-        }
-        
     }
 }
