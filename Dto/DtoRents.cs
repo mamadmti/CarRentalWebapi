@@ -16,13 +16,11 @@ namespace CarRentalProject.Dto
 
             [Required]
             public int CarsId { get; set; }
-
         }
 
         public class Put:Post
         {
-            [Required]
-            public int Id { get; set; }
+           
         }
 
         public class Show : Put

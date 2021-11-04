@@ -30,8 +30,7 @@ namespace CarRentalProject.Dto
 
         public class Put:Post
         {
-            [Required]
-            public int Id { get; set; }
+   
         }
         
     }
