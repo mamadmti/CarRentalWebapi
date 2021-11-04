@@ -21,7 +21,7 @@ namespace CarRentalProject.Model
         [Required]
         public DateTime ManufactorDate { get; set; }
         [Required]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool AvailabilityForRent { get; set; }
 
 
