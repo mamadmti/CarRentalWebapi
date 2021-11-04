@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -12,8 +13,6 @@ namespace CarRentalProject.Model
         [Required]
         public int Id { get; set; }
         [Required]
-        public string Color { get; set; }
-        [Required]
         public string PlateNum { get; set; }
         [Required]
         public string Model { get; set; }
@@ -22,15 +21,16 @@ namespace CarRentalProject.Model
         [Required]
         public DateTime ManufactorDate { get; set; }
         [Required]
+        [DefaultValue(true)]
         public bool AvailabilityForRent { get; set; }
 
 
 
 
         /// ارتباط با جدول برند
-        public tblBrands TblBrands { get; set; }
+        public tblBrands tblBrands { get; set; }
         [Required]
-        public int TblBrandsId { get; set; }
+        public int tblBrandsId { get; set; }
         //ارتباط با جدول رنگ ها
         public tblColors tblColors { get; set; }
         [Required]
